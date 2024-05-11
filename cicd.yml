@@ -1,0 +1,36 @@
+name: Hello World microservice CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_TAG_BASE=staillansag/stt-hello-world
+  IMAGE_VERSION_BASE=1.0
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: |
+        echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+    - name: Build Docker image
+      run: |
+        docker build -t IMAGE_TAG_BASE:latest .
+
+    - name: Tagging image with specific version
+      run: |
+        docker tag IMAGE_TAG_BASE:latest IMAGE_TAG_BASE:IMAGE_VERSION_BASE.$GITHUB_RUN_NUMBER
+
+    - name: Push Docker image
+      run: |
+        docker push IMAGE_TAG_BASE:latest
+        docker push IMAGE_TAG_BASE:IMAGE_VERSION_BASE.$GITHUB_RUN_NUMBER
+
