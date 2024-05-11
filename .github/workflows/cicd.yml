@@ -12,6 +12,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    container:
+      image: staillansag/ubuntu-cicd
 
     steps:
     - name: Check out repository
@@ -36,14 +38,10 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    container:
+      image: staillansag/ubuntu-cicd
 
     steps:
-    - name: Install Azure CLI
-      uses: azure/CLI@v1
-
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v1
-
     - name: Log in to Docker Hub
       run: |
         echo "${{ secrets.DOCKER_REGISTRY_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
