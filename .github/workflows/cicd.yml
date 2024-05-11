@@ -60,3 +60,19 @@ jobs:
       run: |
         kubectl rollout status deployment/stt-hello-world --timeout=300s
 
+    - name: Check microservice health
+      run: |
+        PODS=$(kubectl get pods --selector=app=stt-hello-world -o jsonpath='{.items[*].metadata.name}')
+        for POD in $PODS; do
+          health_json=$(kubectl exec $POD --container msr -- curl -s http://localhost:5555/health)
+          if [ -z "${health_json}" ]; then
+            echo "Empty response to http://localhost:5555/health for pod ${POD}" && exit 1
+          else
+            echo "Health status for pod ${POD}"
+            echo ${health_json}
+          fi
+          status_checks=$(echo "$health_json" | jq '. | .. | .status? // empty | select(. != "UP")')
+          if [[ -n "$status_checks" ]]; then
+            echo "Error: One or more resources in $POD are not 'UP'" && exit 1
+          fi
+        done
