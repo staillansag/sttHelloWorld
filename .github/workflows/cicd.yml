@@ -112,4 +112,5 @@ jobs:
         newman run HelloWorld.postman_collection.json -e HelloWorld.postman_environment.json \
           --env-var "url=https://${{ env.SERVICE_IP }}:5543" \
           --env-var "userName=Administrator" \
-          --env-var "password=${{ env.ADMIN_PASSWORD }}"
+          --env-var "password=${{ env.ADMIN_PASSWORD }}" \
+          --insecure
