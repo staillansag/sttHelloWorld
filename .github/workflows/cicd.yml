@@ -55,3 +55,8 @@ jobs:
     - name: Deploy microservice
       run: |
         kubectl apply -f kubernetes.yml
+
+    - name: Wait for end of Deployment
+      run: |
+        kubectl rollout status deployment/stt-hello-world --timeout=300s
+

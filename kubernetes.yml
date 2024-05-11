@@ -38,6 +38,20 @@ spec:
               readOnly:  true
             - name: secrets
               mountPath: /etc/secrets
+          livenessProbe:
+            tcpSocket:
+              port: 5555
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            tcpSocket:
+              port: 5555
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            failureThreshold: 18
       volumes:
         - name: secrets
           secret:
