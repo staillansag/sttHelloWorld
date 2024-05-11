@@ -99,15 +99,17 @@ jobs:
     - name: Get external IP of K8S service
       run: |
         SERVICE_IP=$(kubectl get service stt-hello-world -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        echo "SERVICE_IP=$SERVICE_IP" >> $GITHUB_ENV
 
     - name: Get MSR Administrator password
       run: |      
         ADMIN_PASSWORD=$(kubectl get secret environment-secrets -o jsonpath="{.data.ADMIN_PASSWORD}" | base64 --decode)
+        echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_ENV
 
     - name: Run automated tests
       run: |
         cd ./resources/test
         newman run HelloWorld.postman_collection.json -e HelloWorld.postman_environment.json \
-          --env-var "url=https://${SERVICE_IP}:5543" \
+          --env-var "url=https://${{ env.SERVICE_IP }}:5543" \
           --env-var "userName=Administrator" \
-          --env-var "password=${ADMIN_PASSWORD}"
+          --env-var "password=${{ env.ADMIN_PASSWORD }}"
