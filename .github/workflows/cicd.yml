@@ -12,8 +12,6 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    container:
-      image: staillansag/ubuntu-cicd
 
     steps:
     - name: Check out repository
@@ -37,15 +35,12 @@ jobs:
         docker push ${{ env.IMAGE_TAG_BASE }}:${{ env.IMAGE_VERSION_BASE }}.$GITHUB_RUN_NUMBER
 
   deploy:
+    needs: build-and-push 
     runs-on: ubuntu-latest
     container:
       image: staillansag/ubuntu-cicd
 
     steps:
-    - name: Log in to Docker Hub
-      run: |
-        echo "${{ secrets.DOCKER_REGISTRY_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
-
     - name: Log in to Azure
       run: |
         az login --service-principal -u ${AZ_SP_ID} -p ${AZ_SP_SECRET} --tenant ${AZ_TENANT_ID}
