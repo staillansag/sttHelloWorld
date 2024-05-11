@@ -61,6 +61,7 @@ jobs:
         kubectl rollout status deployment/stt-hello-world --timeout=300s
 
     - name: Check microservice health
+      shell: bash
       run: |
         PODS=$(kubectl get pods --selector=app=stt-hello-world -o jsonpath='{.items[*].metadata.name}')
         for POD in $PODS; do
