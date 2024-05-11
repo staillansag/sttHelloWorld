@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stt-hello-world
+data:
+  application.properties: |
+    user.Administrator.password=$secret{ADMIN_PASSWORD}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stt-hello-world
+  name: stt-hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stt-hello-world
+  template:
+    metadata:
+      labels:
+        app: stt-hello-world
+    spec:
+      containers:
+        - image: staillansag/stt-hello-world
+          name: msr
+          volumeMounts:
+            - name: microservicesruntime-license
+              mountPath: /opt/softwareag/IntegrationServer/config/licenseKey.xml
+              subPath:   licenseKey.xml
+              readOnly:  true
+            - name: application-properties
+              mountPath: /opt/softwareag/IntegrationServer/application.properties
+              subPath:   application.properties
+              readOnly:  true
+            - name: secrets
+              mountPath: /etc/secrets
+      volumes:
+        - name: secrets
+          secret:
+            secretName: environment-secrets
+        - name: microservicesruntime-license
+          secret:
+            secretName: licenses
+            defaultMode: 0666
+            items:
+            - key:  msr-license
+              path: licenseKey.xml
+        - name: application-properties
+          configMap:
+            name: stt-hello-world
+            items:
+            - key:  application.properties
+              path: application.properties
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: stt-hello-world
+  labels:
+    name: stt-hello-world
+    app: stt-hello-world
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5555
+    targetPort: 5555
+    name: http
+  - port: 5543
+    targetPort: 5543
+    name: https
+  selector:
+    app: stt-hello-world
