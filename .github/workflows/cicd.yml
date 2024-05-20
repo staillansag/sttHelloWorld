@@ -37,6 +37,6 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
-        TAG_NAME=${{ env.IMAGE_VERSION_BASE }}.$GITHUB_RUN_NUMBER
+        TAG_NAME=v${{ env.IMAGE_VERSION_BASE }}.$GITHUB_RUN_NUMBER
         gh release create $TAG_NAME --generate-notes     
 
