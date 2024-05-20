@@ -1,0 +1,28 @@
+name: webMethods microservice CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: staillansag/stt-hello-world
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ env.IMAGE_NAME }}:latest .
+
+    - name: Log in to Docker Hub
+      run: |
+        echo "${{ secrets.DOCKER_REGISTRY_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_REGISTRY_USERNAME }} --password-stdin
+
+    - name: Push Docker image
+      run: |
+        docker push ${{ env.IMAGE_NAME }}:latest
