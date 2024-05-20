@@ -27,9 +27,3 @@ jobs:
       run: |
         docker push ${{ env.IMAGE_NAME }}:latest 
 
-    - name: Create Git Tag
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: |
-        TAG_NAME=v1.0.${{ github.run_number }}
-        gh release create $TAG_NAME --generate-notes
