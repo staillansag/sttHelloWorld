@@ -30,7 +30,7 @@ spec:
         app: stt-hello-world
     spec:
       containers:
-        - image: staillansag/stt-hello-world:0.0.1
+        - image: staillansag/stt-hello-world:latest
           name: msr
           volumeMounts:
             - name: application-properties

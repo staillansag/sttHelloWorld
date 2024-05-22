@@ -58,6 +58,10 @@ jobs:
       run: |
         az aks get-credentials --name aks_cluster --resource-group aks_rg --overwrite-existing
 
-    - name: Test Kubernetes connexion
+    - name: Deploy microservice
       run: |
-        kubectl get nodes  
+        sed 's/staillansag\/stt-hello-world\:latest/staillansag\/stt-hello-world\:'${{ env.IMAGE_VERSION_BASE }}.${{ github.run_number }}'/g' kubernetes.yml | kubectl apply -f -
+
+    - name: Wait for end of Deployment
+      run: |
+        kubectl rollout status deployment/stt-hello-world --timeout=300s
