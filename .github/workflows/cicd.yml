@@ -49,3 +49,15 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
+
+    - name: Log in to Azure
+      run: |
+        az login --service-principal -u ${{ secrets.AZ_SP_ID }} -p ${{ secrets.AZ_SP_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+
+    - name: Get AKS credentials
+      run: |
+        az aks get-credentials --name aks_cluster --resource-group aks_rg --overwrite-existing
+
+    - name: Test Kubernetes connexion
+      run: |
+        kubectl get nodes  
