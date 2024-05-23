@@ -95,7 +95,7 @@ jobs:
 
     - name: Get MSR Administrator password
       run: |      
-        ADMIN_PASSWORD=$(kubectl get secret environment-secrets -o jsonpath="{.data.ADMIN_PASSWORD}" | base64 --decode)
+        ADMIN_PASSWORD=$(kubectl get secret stt-hello-world -o jsonpath="{.data.ADMIN_PASSWORD}" | base64 --decode)
         echo "ADMIN_PASSWORD=$ADMIN_PASSWORD" >> $GITHUB_ENV
 
     - name: Run automated tests
