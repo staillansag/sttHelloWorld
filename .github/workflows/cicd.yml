@@ -102,8 +102,7 @@ jobs:
       run: |
         cd ./resources/test
         newman run HelloWorld.postman_collection.json \
-          --env-var "url=https://${{ env.SERVICE_IP }}:5543" \
+          --env-var "url=http://${{ env.SERVICE_IP }}:8080" \
           --env-var "userName=Administrator" \
           --env-var "password=${{ env.ADMIN_PASSWORD }}" \
-          --env-var "callerName=newman" \
-          --insecure
+          --env-var "callerName=newman" 
