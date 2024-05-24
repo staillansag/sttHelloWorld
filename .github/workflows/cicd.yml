@@ -1,6 +1,6 @@
 name: webMethods microservice CI/CD
 
-on:
+on: 
   push:
     branches:
       - master
