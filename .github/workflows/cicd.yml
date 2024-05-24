@@ -86,12 +86,12 @@ jobs:
 
     - name: Get AKS credentials
       run: |
-        az aks get-credentials --name ${{ vars.AKS_CLUSTER }} --resource-group ${{ vars.AKS_RESOURCE_GROUP }} --overwrite-existing
+        az aks get-credentials --name ${{ vars.AKS_CLUSTER }} --resource-group ${{ vars.AKS_RESOURCE_GROUP }} --overwrite-existing 
 
     - name: Get external IP of K8S service
       run: |
         SERVICE_IP=$(kubectl get service stt-hello-world -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-        echo "SERVICE_IP=$SERVICE_IP" >> $GITHUB_ENV
+        echo "SERVICE_IP=$SERVICE_IP" >> $GITHUB_ENV  
 
     - name: Get MSR Administrator password
       run: |      
@@ -105,4 +105,4 @@ jobs:
           --env-var "url=http://${{ env.SERVICE_IP }}:8080" \
           --env-var "userName=Administrator" \
           --env-var "password=${{ env.ADMIN_PASSWORD }}" \
-          --env-var "callerName=newman" 
+          --env-var "callerName=newman"     
