@@ -303,5 +303,21 @@
 
 <MAPDELETE FIELD="/name;1;0">
 </MAPDELETE>
+
+<MAPINVOKE SERVICE="pub.date:getCurrentDate" VALIDATE-IN="$none" VALIDATE-OUT="$none" INVOKE-ORDER="0">
+
+  <!-- nodes -->
+
+<MAP MODE="INVOKEINPUT">
+</MAP>
+
+<MAP MODE="INVOKEOUTPUT">
+
+  <!-- nodes -->
+
+<MAPCOPY FROM="/date;3.9;0" TO="/dateTime;3.9;0">
+</MAPCOPY>
+</MAP>
+</MAPINVOKE>
 </MAP>
 </FLOW>
