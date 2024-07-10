@@ -3,7 +3,7 @@ version: '3.8'
 services:
   msr:
     container_name: msr
-    image: stt-hello-world
+    image: quay.io/staillanibm/stt-hello-world:latest
     ports:
       - "15555:5555"
     env_file:

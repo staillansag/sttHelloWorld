@@ -15,7 +15,7 @@ metadata:
     app: stt-hello-world
   name: stt-hello-world
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: stt-hello-world
@@ -30,7 +30,7 @@ spec:
         app: stt-hello-world
     spec:
       containers:
-        - image: staillansag/stt-hello-world:latest 
+        - image: quay.io/staillanibm/stt-hello-world:latest
           name: msr
           volumeMounts:
             - name: application-properties
@@ -99,3 +99,24 @@ spec:
   - port: 8080
     targetPort: 5555
     name: http
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: hello.world
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80

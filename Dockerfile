@@ -1,4 +1,4 @@
-FROM softwareag/webmethods-microservicesruntime:10.15
+FROM quay.io/staillanibm/webmethods-microservicesruntime:10.15.0.11-ocp
 
 USER sagadmin
 
