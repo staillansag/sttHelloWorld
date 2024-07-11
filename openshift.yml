@@ -15,7 +15,7 @@ metadata:
     app: stt-hello-world
   name: stt-hello-world
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: stt-hello-world
@@ -94,7 +94,7 @@ metadata:
 spec:
   selector:
     app: stt-hello-world
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 8080
     targetPort: 5555
@@ -102,21 +102,19 @@ spec:
 
 ---
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: Route
+apiVersion: route.openshift.io/v1
 metadata:
-  name: nginx-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: stt-hello-world
+  labels:
+    app: stt-hello-world
+    name: stt-hello-world
 spec:
-  rules:
-  - host: hello.world
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx-service
-            port:
-              number: 80
+  to:
+    kind: Service
+    name: stt-hello-world
+    weight: 100
+  port:
+    targetPort: http
+  wildcardPolicy: None
+

@@ -1,0 +1,21 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: stt-hello-world
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/staillansag/sttHelloWorld.git
+      ref: openshift
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+      forcePull: true 
+      noCache: true 
+  output:
+    to:
+      kind: ImageStreamTag
+      name: stt-hello-world:latest
+
