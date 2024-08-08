@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: FileManagementAPI
+  version: 1.0.0
+servers:
+  - url: http://localhost:5555/FileManagementAPI
+paths:
+  /upload:
+    post:
+      summary: Upload File in Binary Format
+      operationId: uploadFileBinary
+      parameters:
+        - name: X-Filename
+          in: header
+          description: The name of the file being uploaded.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        "200":
+          description: File Uploaded Successfully
+        "400":
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reports:
+    post:
+      summary: Request a Report on files previously uploaded
+      operationId: requestReport
+      requestBody:
+        description: Report request object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        "202":
+          description: Report request accepted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportRequest'
+        "400":
+          description: Invalid Report Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A unique error code representing the specific error type.
+        message:
+          type: string
+          description: A human-readable message describing the error.
+        transactionId:
+          type: string
+          description: The internal transactionId associated to the error
+      required:
+        - code
+        - message
+
+    ReportRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier for the report request.
+        folder:
+          type: string
+          description: The name of the folder for which the report is generated.
+      required:
+        - id
+        - folder

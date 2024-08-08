@@ -1,2 +1,4 @@
 .env
 kubernetes-secrets.yml
+.DS_Store
+*.bak

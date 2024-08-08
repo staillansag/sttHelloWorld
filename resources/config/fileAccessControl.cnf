@@ -1,0 +1,3 @@
+allowedWritePaths=/files/**
+allowedReadPaths=/files/**
+allowedDeletePaths=/files/**

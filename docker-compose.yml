@@ -1,12 +1,61 @@
 version: '3.8'
 
 services:
-  msr:
-    container_name: msr
-    image: stt-hello-world
+  msr-hello-world:
+    container_name: msr-hello-world
+    image: staillansag/stt-hello-world:mf-0.0.2
     ports:
       - "15555:5555"
     env_file:
       - .env
     volumes:
       - ./application.properties:/opt/softwareag/IntegrationServer/application.properties
+      - ./resources/config/fileAccessControl.cnf:/opt/softwareag/IntegrationServer/packages/WmPublic/config/fileAccessControl.cnf
+      - $HOME/licenses/msr-license.xml:/opt/softwareag/IntegrationServer/config/licenseKey.xml:ro
+      - $HOME/shared/files:/files
+    networks:
+      - wm
+    depends_on:
+      - database
+      - umserver
+
+  database:
+    image: mysql
+    container_name: database
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wm
+
+  umserver:
+    image: softwareag/universalmessaging-server:10.15
+    container_name: umserver
+    networks:
+      - wm
+    ports:
+      - "9000:9000"
+      - "9200:9200"
+    volumes:
+      - um-data-volume:/opt/softwareag/UniversalMessaging/server/umserver/data
+      - um-conf-volume:/opt/softwareag/common/conf
+      - $HOME/licenses/um-license.xml:/opt/softwareag/UniversalMessaging/server/umserver/licence/licence.xml:ro
+    healthcheck:
+      interval: 5s
+      retries: 12
+      test: ["CMD-SHELL", "curl --silent http://localhost:9000/health/ | grep -q '\"ServerStatus\":\"OK\"'"]
+
+volumes:
+  db_data:
+  um-data-volume:
+  um-conf-volume:
+
+networks:
+  wm:

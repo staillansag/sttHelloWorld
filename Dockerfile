@@ -1,4 +1,4 @@
-FROM softwareag/webmethods-microservicesruntime:10.15
+FROM staillansag/webmethods-microservicesruntime:10.15.0.12-mf
 
 USER sagadmin
 
