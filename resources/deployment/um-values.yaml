@@ -121,7 +121,7 @@ securityContext: {}
   # runAsNonRoot: true
 
 service:
-  type:       NodePort
+  type:       ClusterIP
   # -- Universal Messaging default port
   port:       9000
   # -- Metrics port
@@ -138,7 +138,7 @@ storage:
 ingress:
   # -- Enable or disable Ingress, default is disabled. On enabling Ingress, only the first `-0` replica is currently supported. 
   enabled: false
-  defaultHostname: um.sttlab.fr
+  defaultHostname: um.local
   className: "nginx"
   annotations: {}
   hosts:

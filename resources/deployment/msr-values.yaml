@@ -263,7 +263,7 @@ service:
 
 ingress:
   enabled: true
-  defaultHostname: msr.sttlab.fr
+  defaultHostname: msr-helloworld.local
   className: "nginx"
   annotations: {}
   hosts:

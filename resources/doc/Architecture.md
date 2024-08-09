@@ -2,7 +2,7 @@
 
 ##  Logical architecture
 
-![Logical architecture](resources/doc/LogicalArchitecture.png)
+![Logical architecture](./LogicalArchitecture.png)
 
 We follow a classical (APIM + Integration + Data persistence) architecture.  
 
@@ -18,5 +18,12 @@ In the persistence tiers, we have:
 
 The important thing is to externalize these persistence aspects outside the Kubernetes cluster. From the containers standpoint, they are external services.
 
-##  Deployment architecture
+##  Kubernetes deployment architecture
 
+### Microservice runtime
+
+![Deployment architecture](./Deployment-MSR.png)
+
+### Universal Messaging
+
+![Deployment architecture](./Deployment-UM.png)

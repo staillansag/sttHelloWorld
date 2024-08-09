@@ -1,0 +1,476 @@
+---
+# Source: microservicesruntime/templates/configmap.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stt-hello-world
+  labels:
+    app.kubernetes.io/name: microservicesruntime
+    helm.sh/chart: microservicesruntime-1.0.5
+    app.kubernetes.io/instance: msr-hello-world
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "10.15"
+
+data:
+  applicationFile.properties: |
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionEnabled=true
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.databaseName=database
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.otherProperties=allowPublicKeyRetrieval\=true
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.password=$secret{MYSQL_PASSWORD}
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.portNumber=3306
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.serverName=database-1.cfqp5yv86ho3.eu-central-1.rds.amazonaws.com
+    artConnection.sttHelloWorld.fr.sttlab.jdbc.jdbc_sttHelloWorld.connectionSettings.user=$secret{MYSQL_USER}
+    
+    jndi.DEFAULT_IS_JNDI_PROVIDER.providerURL=nsp://umserver-universalmessaging-0:9000
+    jms.DEFAULT_IS_JMS_CONNECTION.clientID=DEFAULT_IS_JMS_CLIENT
+    jms.DEFAULT_IS_JMS_CONNECTION.enabled=true
+    jms.DEFAULT_IS_JMS_CONNECTION.csqSize=0
+    jms.DEFAULT_IS_JMS_CONNECTION.jndi_jndiAliasName=DEFAULT_IS_JNDI_PROVIDER
+    jms.DEFAULT_IS_JMS_CONNECTION.jndi_automaticallyCreateUMAdminObjects=true
+    jms.DEFAULT_IS_JMS_CONNECTION.producerMaxRetryAttempts=30
+    jms.DEFAULT_IS_JMS_CONNECTION.producerRetryInterval=1000
+    jms.DEFAULT_IS_JMS_CONNECTION.jndi_connectionFactoryLookupName=um_cf
+    
+    sftpserver.mft.hostName=wmioplayground.mft-aw-us.webmethods.io
+    sftpserver.mft.port=13022
+    sftpserver.mft.hostKey=Y25OaExYTm9ZVEl0TlRFeUlFRkJRVUZDTTA1NllVTXhlV015UlVGQlFVRkVRVkZCUWtGQlFVTkJVVVJPYzBJeFNuQjRZMWMyZDA1aWNERjBZa3hQZDBOWmQxWlNlVk15VXpsRmEwMTFWazVWVEVabVdUbHBSMHRuUkM5SmVqYzBNbmRhVDA4clNISktSV1ZWYmxkSVdXOXRiamxxV1hSbVJFOVRhMlY2Vkc5dVJpOUdWM00wZDBGa1pEbHZlbGw1Tm5wMlJqQTNaR1pRUVhoTFNWRmtNbWRCYlcxQk1EUlZlRFY2VlZSQmRHNXdWM04wVjAxMVRFZFVUbm8xT1ZsSVRtRlRSREkxUkdobldHdFVXWEpYUXpoRFNEa3dkazVEVXpSM2NuVnlLMU5IUzJjMU5qUjRSR2d3ZWxGeGVtZGpPVFI2WXpVMU0yTklNVmxOT0dsa1prMVVVWEUzYUVrMmR6UkNaVkJ0VFcxSk1WQXJPVVF6UWxWcloxUjNSVzlGWWtWWFEzRkdNblZyUjA5TFlWWlhVSEJHTVhOdE0yeFBkRzlSU0ZBeldVWnJhRWQxVTA5TEsySlVaR2w2ZUdrNU5FTk1hVXd5WTJwNFdUUjJRazkzV0d0RE5FVTVWV3h0Wm5FNVF5dHBiek5VV0cxNmVYaFhZemRwVGxKaGFGWm5UMDFNVUhacFpTdFZWbEZrYVdGQ1pHZFpVVTFQTnpKQmFtOTZibEZHV25CcWJFcFRaVWQxZVdSbVdreE5XbVY1U0ZoSVlUWkRWSGgzUlVVd1NUWlFZazVIVFU1WVlVMXZPVzB4UVRWM2J6Vm5SMlpqUWpsMmJtNXFSMWRYZFZRNWQwVnRPVzlQU25JMGRIRnJUSGsxUlRseFdtaDNOQzlPVDB0bE9ERldNbGRVT0ZGSlNHZEpTMHhtVDA5aGRYUTJUVE55YURacmVsbHpNU3RTTjBaU2RYVnNiRkZYUVhKd2JFZGtkV2xpUzFSclJFdGhiR3R4ZVRKaWJVcDZTWFZ5UVVGdlRIRnNhbGxQWWpCRlRYWnhjbUZqVmtReWVsUm1WM1p6VUZaYU9WQnhNelZ1T1hWeFUwZ3pjV0V2TTJVemEyTnJOSEp4VjAxM0syVXlUelpUTTNjM1N6aHhWMDVzVGtKM2JWVlZTMG80T0U1M2FVaDBhV05zUkdJMVUxQTJNbXhMWjFRMGNFY3hOVGhDU3pSS2RXdGFka3RoUzNBNU1XUk5jM2xrTkdKNGVHUXZSVkpFVVVSc09HWkhRbFZzZUUxS1JrVjZkejA5s
+    sftpuser.mft_user.userName=$secret{SFTP_USER}
+    sftpuser.mft_user.password=$secret{SFTP_PASSWORD}
+    sftpuser.mft_user.sftpServerAlias=mft
+    
+    settings.watt.net.default.accept=application/json
+    settings.watt.server.ns.lockingMode=none
+    settings.watt.server.pipeline.processor=false
+    settings.watt.net.localhost=stt-hello-world
+    settings.watt.server.scheduler.logical.hostname=stt-hello-world
+    settings.watt.server.saveConfigFiles=false 
+    settings.watt.server.audit.logFilesToKeep=1
+    settings.watt.server.serverlogFilesToKeep=1
+    settings.watt.server.stats.logFilesToKeep=1
+    
+    statisticsdatacollector.monitorConfig.enabled=false
+    
+    user.Administrator.password=$secret{ADMIN_PASSWORD}
+    
+    globalvariable.SERVER.value=kubernetes
+    globalvariable.FILE_UPLOAD_DIRECTORY.value=/files
+    globalvariable.SFTP_DIRECTORY.value=/stt/processed
+    
+  application.properties: |
+---
+# Source: microservicesruntime/templates/configmaps-extra.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: file-access-control
+  labels:
+    app.kubernetes.io/name: microservicesruntime
+    helm.sh/chart: microservicesruntime-1.0.5
+    app.kubernetes.io/instance: msr-hello-world
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "10.15"
+data:
+  fileAccessControl.cnf: |-
+    
+    allowedWritePaths=/files/**
+    allowedReadPaths=/files
+    allowedDeletePaths=/files/**
+---
+# Source: microservicesruntime/templates/service.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: stt-hello-world
+  labels:
+    app.kubernetes.io/name: microservicesruntime
+    helm.sh/chart: microservicesruntime-1.0.5
+    app.kubernetes.io/instance: msr-hello-world
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "10.15"
+spec:
+  type: NodePort
+  ports:
+  - port: 5555
+    protocol: TCP
+    targetPort: http
+    name: http
+  - port: 9999
+    protocol: TCP
+    targetPort: diag
+    name: diag
+  - port: 5543
+    protocol: TCP
+    targetPort: https
+    name: https
+  selector:
+    app.kubernetes.io/name: microservicesruntime
+    app.kubernetes.io/instance: msr-hello-world
+---
+# Source: microservicesruntime/templates/deployment.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stt-hello-world
+  labels:
+    app.kubernetes.io/name: microservicesruntime
+    helm.sh/chart: microservicesruntime-1.0.5
+    app.kubernetes.io/instance: msr-hello-world
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "10.15"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: microservicesruntime
+      app.kubernetes.io/instance: msr-hello-world
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics" 
+        prometheus.io/port: "5555"
+        prometheus.io/scheme: "http"
+      labels:
+        app.kubernetes.io/name: microservicesruntime
+        app.kubernetes.io/instance: msr-hello-world
+    spec:
+      imagePullSecrets:
+        - name: dh-regcred
+      serviceAccountName: default
+      securityContext:
+        fsGroup: 1724
+      initContainers:
+        []
+      containers:
+        - name: msr-hello-world
+          securityContext:
+            {}
+          image: "staillansag/stt-hello-world:mf-0.0.2"
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: JAVA_MIN_MEM
+            value: 512M
+          - name: JAVA_MAX_MEM
+            value: 1024M
+          - name: SAG_IS_LICENSE_FILE
+            value: /opt/softwareag/IntegrationServer/licenseKey.xml
+          - name: SAG_IS_CONFIG_PROPERTIES
+            value: "/opt/softwareag/IntegrationServer/applicationFile.properties,/opt/softwareag/IntegrationServer/application.properties"
+          
+          ports:
+          - containerPort: 5543
+            name: https
+            protocol: TCP
+          - containerPort: 9999
+            name: diag
+            protocol: TCP
+          - containerPort: 5555
+            name: http
+            protocol: TCP
+          startupProbe:
+            failureThreshold: 32
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/liveness
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/readiness
+              port: http
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: microservicesruntime-license
+              mountPath: /opt/softwareag/IntegrationServer/licenseKey.xml
+              subPath:   licenseKey.xml
+              readOnly:  true
+            - name: application-properties
+              mountPath: /opt/softwareag/IntegrationServer/application.properties
+              subPath:   application.properties
+              readOnly:  true
+            - name: applicationfile-properties
+              mountPath: /opt/softwareag/IntegrationServer/applicationFile.properties
+              subPath:   applicationFile.properties
+              readOnly:  true
+            - mountPath: /files
+              name: fileshare
+              readOnly: false
+            - mountPath: /opt/softwareag/IntegrationServer/packages/WmPublic/config/fileAccessControl.cnf
+              name: file-access-control
+              readOnly: true
+              subPath: fileAccessControl.cnf
+            - name: msr-secrets
+              mountPath: /etc/secrets
+        
+      volumes:
+        - name: msr-secrets
+          secret:
+            secretName: msr-secrets
+        - name: microservicesruntime-license
+          configMap:
+            name: microservicesruntime-license-key
+            defaultMode: 0666
+            items:
+            - key:  licensekey
+              path: licenseKey.xml
+        - name: application-properties
+          configMap:
+            name: stt-hello-world
+            items:
+            - key:  application.properties
+              path: application.properties
+        - name: applicationfile-properties
+          configMap:
+            name: stt-hello-world
+            items:
+            - key:  applicationFile.properties
+              path: applicationFile.properties
+        # Currently some extra blocks accept strings
+        # to continue with backwards compatibility this is being kept
+        # whilst also allowing for yaml to be specified too.
+          
+        - name: fileshare
+          persistentVolumeClaim:
+            claimName: stt-hello-world
+        - configMap:
+            name: file-access-control
+          name: file-access-control
+---
+# Source: microservicesruntime/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stt-hello-world
+  labels:
+    app.kubernetes.io/name: microservicesruntime
+    helm.sh/chart: microservicesruntime-1.0.5
+    app.kubernetes.io/instance: msr-hello-world
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/version: "10.15"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: msr-helloworld.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stt-hello-world
+                port:
+                  number: 5555
+---
+# Source: microservicesruntime/templates/hpa.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+---
+# Source: microservicesruntime/templates/ingress.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+---
+# Source: microservicesruntime/templates/job.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+---
+# Source: microservicesruntime/templates/pvc.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+---
+# Source: microservicesruntime/templates/serviceaccount.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
+---
+# Source: microservicesruntime/templates/servicemonitor.yaml
+# /*
+#  * Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+#  *
+#  * SPDX-License-Identifier: Apache-2.0
+#  *
+#  *   Licensed under the Apache License, Version 2.0 (the "License");
+#  *   you may not use this file except in compliance with the License.
+#  *   You may obtain a copy of the License at
+#  *
+#  *       http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  *   Unless required by applicable law or agreed to in writing, software
+#  *   distributed under the License is distributed on an "AS IS" BASIS,
+#  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  *   See the License for the specific language governing permissions and
+#  *   limitations under the License.
+#  *
+#  */
