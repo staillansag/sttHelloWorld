@@ -1,5 +1,10 @@
+resources
 application.properties
-.env
+.env*
 Dockerfile
 docker-compose.yml
+kubernetes*.yml*
 *.md
+.git
+.gitignore
+.project
