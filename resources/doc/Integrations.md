@@ -9,7 +9,7 @@ It takes a name QP in the request and returns a "Hello %name%" message in the re
 ```
 curl --location "${ROOT_URL}/hello-world/greetings?name=someone" \
 --header 'accept: application/json' \
--u Administrator:${ADMIN_PASSWORD} \
+-u Administrator:${ADMIN_PASSWORD} 
 ```
 
 ## POST /greetings
@@ -37,10 +37,10 @@ This method takes a binary file in input and saves it into a persistent storage 
 Implemented in a contract-first approach (see the OpenAPI v3 specification: resources/api/FileManagement.yml)  
 ```
 curl --location "${ROOT_URL}/rad/fr.sttlab.api:FileManagementAPI/upload" \
---header 'X-Filename: ${FILENAME}' \
+--header "X-Filename: ${FILENAME}" \
 --header 'Content-Type: application/octet-stream' \
 -u Administrator:${ADMIN_PASSWORD} \
---data '@${LOCAL_FILE_LOCATION}'
+--data "@${LOCAL_FILE_LOCATION}"
 ```
 
 ## POST /reports
