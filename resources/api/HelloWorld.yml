@@ -1,0 +1,78 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: "HelloWorldAPI"
+host: "192.168.1.15:5555"
+basePath: "/hello-world"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /greetings:
+    get:
+      operationId: "getGreetings"
+      parameters:
+      - name: "name"
+        in: "query"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/getGreetingsResponse"
+        "401":
+          description: "Access Denied"
+    post:
+      operationId: "postGreetings"
+      parameters:
+      - in: "body"
+        name: "greeting"
+        required: true
+        schema:
+          $ref: "#/definitions/Greeting"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/postGreetingsResponse"
+        "401":
+          description: "Access Denied"
+definitions:
+  postGreetingsResponse:
+    required:
+    - "greeting"
+    properties:
+      greeting:
+        $ref: "#/definitions/Greeting"
+  Greeting:
+    required:
+    - "issuer"
+    - "message"
+    properties:
+      id:
+        type: "string"
+      message:
+        type: "string"
+      issuer:
+        type: "string"
+      creationDateTime:
+        type: "string"
+        format: "date-time"
+  getGreetingsResponse:
+    required:
+    - "dateTime"
+    - "message"
+    - "node"
+    properties:
+      message:
+        type: "string"
+      dateTime:
+        type: "string"
+        format: "date-time"
+      node:
+        type: "string"

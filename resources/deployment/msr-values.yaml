@@ -39,9 +39,11 @@ extraVolumes:
     name: file-access-control 
 
 # -- Exta environment properties to be passed on to the microservice runtime
-extraEnvs: []
-#  - name: extraEnvironmentVariable
-#    value: "myvalue"
+extraEnvs: 
+- name: SERVER
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
 
 # -- Extra Ports to be defined, note: these ports need to be created 
 extraPorts: []
@@ -224,7 +226,7 @@ microservicesruntime:
 
       user.Administrator.password=$secret{ADMIN_PASSWORD}
 
-      globalvariable.SERVER.value=kubernetes
+      globalvariable.SERVER.value=$env{SERVER}
       globalvariable.FILE_UPLOAD_DIRECTORY.value=/files
       globalvariable.SFTP_DIRECTORY.value=/stt/processed
 
