@@ -2,3 +2,4 @@
 kubernetes-secrets.yml
 .DS_Store
 *.bak
+commands.sh

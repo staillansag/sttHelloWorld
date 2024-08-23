@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: microgateway
+  name: microgateway
+spec:
+  replicas: 2
+  strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: microgateway
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+      labels:
+        app: microgateway
+    spec:
+      containers:
+      - name: microgateway
+        image: sagcr.azurecr.io/microgateway:10.15.0.17
+        ports:
+        - containerPort: 9093
+          name: https
+          protocol: TCP
+        - containerPort: 9090
+          name: http
+          protocol: TCP
+        env:
+        - name: mcgw_api_gateway_url
+          value: https://presalesemeadev.apigw-aw-eu.webmethods.io
+        - name: mcgw_api_gateway_user
+          valueFrom:
+            secretKeyRef:
+              name: microgateway-secrets
+              key: apiGatewayUser
+        - name: mcgw_api_gateway_password
+          valueFrom:
+            secretKeyRef:
+              name: microgateway-secrets
+              key: apiGatewayPassword
+        - name: mcgw_downloads_apis
+          value: HelloWorldAPI, FileManagementAPI
+        - name: mcgw_ports_http
+          value: "9090"
+        - name: mcgw_ports_https
+          value: "9093"
+        - name: mcgw_microgatewayPool_microgatewayPoolName
+          value: microgateway
+        - name: mcgw_aliases_helloworld_be_url_type
+          value: endpoint
+        - name: mcgw_aliases_helloworld_be_url_endPointURI
+          value: http://stt-hello-world:5555/hello-world
+        - name: mcgw_aliases_filemanagement_be_url_type
+          value: endpoint
+        - name: mcgw_aliases_filemanagement_be_url_endPointURI
+          value: http://stt-hello-world:5555/rad/fr.sttlab.api:FileManagementAPI
+        - name: mcgw_applications_sync_enabled
+          value: "true"
+        - name: mcgw_applications_sync_polling_interval_secs
+          value: "10"
+        startupProbe:
+          failureThreshold: 10
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          tcpSocket:
+            port: http
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+          - name: microgateway-license
+            mountPath: /opt/softwareag/Microgateway/config/license.xml
+            subPath:   license.xml
+            readOnly:  true
+      volumes:
+        - name: microgateway-license
+          configMap:
+            name: microgateway-license-key
+            defaultMode: 0666
+            items:
+            - key:  licensekey
+              path: license.xml
+      imagePullSecrets:
+      - name: sag-regcred
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: microgateway
+  labels:
+    name: microgateway
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    protocol: TCP
+    targetPort: http
+    name: http
+  - port: 9093
+    protocol: TCP
+    targetPort: https
+    name: https
+  selector:
+    app: microgateway
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microgateway
+  labels:
+    app: microgateway
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: microgateway.sttlab.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: microgateway
+                port:
+                  number: 9090

@@ -1,7 +1,7 @@
 # Default values for microservicesruntime.
 
 # -- Number of replicates in Deployment
-replicaCount: 1
+replicaCount: 2
 
 # -- StatefulSet or Deployment. You should only change this if you require Client Side queuing (CSQ) or functionality in IS which requires stable hostnames and filesystems. Default is false => Deployment. Keep in mind, you must disable CSQ on each webMethods messaging and JMS connection if you don't use stateful-sets. See examples in Process Engine deployment for disableing QSC.
 statefulSet: false
@@ -12,7 +12,7 @@ image:
   # -- Pull with policy
   pullPolicy: IfNotPresent
   # -- The default value pulls latest. In PROD it is recommended to use a specific fix level.
-  tag:        "mf-0.0.2"
+  tag:        "mf-0.0.3"
 
 # -- Image pull secret reference. By default looks for `regcred`.
 imagePullSecrets: 
@@ -265,7 +265,7 @@ service:
 
 ingress:
   enabled: true
-  defaultHostname: msr-helloworld.local
+  defaultHostname: msr-helloworld.sttlab.eu
   className: "nginx"
   annotations: {}
   hosts:
