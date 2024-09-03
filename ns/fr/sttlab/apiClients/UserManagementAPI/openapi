@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: UserManagementAPI
+  description: User management API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /users/{userName}:
+    get:
+      summary: Retrieve user information by user name
+      description: Returns user details based on the provided username.
+      operationId: getUser
+      parameters:
+      - name: userName
+        in: path
+        description: The username of the user to retrieve.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful response with user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: Not found
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - basicAuth: []
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userName:
+          type: string
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        status:
+          type: boolean
+        email:
+          type: string
+          nullable: true
+        organization:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: A unique error code representing the specific error type.
+        message:
+          type: string
+          description: A human-readable message describing the error.
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
